@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<style>
+    #main {position: absolute;width:178px;height:200px;left:50%;top:20%;}
+    /*css注释：为了方便截图，对CSS代码进行换行*/
+</style>
+<body>
+<div id="main">
+    <h1>发布会管理</h1>
+    <form  method="post" action="/login_action/">
+        <input name="username" type="text" placeholder="请输入您的登录账号" ><br><br/>
+        <input name="password" type="password" placeholder="请输入您的登录密码"><br><br/>{{ error }}
+        <div align="right"><button id="btn" type="submit" >登录</button></div>
+    {% csrf_token %}
+    </form>
+</div>
+
+</body>
+</html>
