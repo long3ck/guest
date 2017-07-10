@@ -59,7 +59,7 @@
                         <td>{{ guest.realname }}</td>
                         <td>{{ guest.phone }}</td>
                         <td>{{ guest.email }}</td>
-                        {% if guest.sign %}<td>是</td>{% else %}<td><font color="red">否</font> </td>{% endif %}
+                        {% if guest.sign %}<td><img src="/static/admin/img/icon-yes.svg" alt="True" /></td>{% else %}<td><img src="/static/admin/img/icon-no.svg" alt="False" /></td>{% endif %}
                         <td>{{ guest.event }}</td>
                     </tr>
                 {% endfor %}

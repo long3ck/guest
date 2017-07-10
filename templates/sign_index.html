@@ -1,30 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <title>XXX发布会管理系统</title>
 </head>
-<body>
 
-<!-- 导航栏 -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">{{ event.name }}</a>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">{{ event.name }}</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/event_manage/">发布会</a></li>
+                    <li class="active"><a href="#">嘉宾</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">{{user}}</a></li>
+                    <li><a href="/logout/">退出</a></li>
+                </ul>
+            </div>
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="/event_manage/">发布会</a></li>
-                <li><a href="/guest_manage/">嘉宾</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+    </nav>
 
 <!-- 签到功能 -->
-<div class="page-header" style="padding-top: 80px;">
-    <div id="navbar" class="navbar-collapse collapse">
+<div class="page-header" style="margin-left:auto;margin-right:auto;width:500px;padding-top: 40px;">
+    <div id="navbar" align="right" class="navbar-collapse collapse">
         <form class="navbar-form" method="post" action="/sign_index_action/{{ event.id }}/">
+            <b>[发布会名称]</b>：
+            <br><br/>
+            <td>{{ event.name }}</td>
+            <br><br/>
+
+            <b>[未签到嘉宾]</b>：
+            <br><br/>
+            {% for no_sign in no_sign_guest %}
+                <td>{{ no_sign.realname }} / {{ no_sign.phone }}</td>
+                <br><br/>
+            {% endfor %}
+
+            <b>[已签到嘉宾]</b>：
+            <br><br/>
+            {% for has_sign in has_sign_guest %}
+                <td>{{ has_sign.realname }} / {{ has_sign.phone }}</td>
+                <br><br/>
+            {% endfor %}
+            <br><br/>
+
             <div class="form-group">
             <input name="phone" type="text" placeholder="输入手机号" class="form-control">
             </div>
@@ -33,6 +61,7 @@
             <br>{{ hint }}
             <br>{{ guest.realname }}
             <br>{{ guest.phone }}
+            <br>{{ guest.event }}
             </font>
             {% csrf_token %}
         </form>

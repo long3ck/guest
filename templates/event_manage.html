@@ -58,7 +58,7 @@
                         <tr>
                             <td>{{ event.id }}</td>
                             <td>{{ event.name }}</td>
-                            {% if event.status %}<td><font color="green">进行中</font></td>{% else %}<td><font color="black">已结束</font></td>{% endif %}
+                            {% if event.status %}<td><font color="green">进行中<img src="/static/admin/img/icon-yes.svg" alt="True" /></font></td>{% else %}<td><font color="red">已结束<img src="/static/admin/img/icon-no.svg" alt="False" /></font></td>{% endif %}
                             <td>{{ event.address }}</td>
                             <td>{{ event.start_time }}</td>
                             <td>

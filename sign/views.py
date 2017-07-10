@@ -26,7 +26,7 @@ def login_action(request):
 def event_manage(request):
     username = request.session.get('user', '')
     event_list = Event.objects.all()
-    paginator = Paginator(event_list, 2)
+    paginator = Paginator(event_list, 3)
     page = request.GET.get('page')
     try:
         contacts = paginator.page(page)
@@ -41,29 +41,33 @@ def event_manage(request):
 # 签到页面
 @login_required
 def sign_index(request, event_id):
+    no_sign_guest = Guest.objects.filter(event_id=event_id,sign=0)
+    has_sign_guest = Guest.objects.filter(event_id=event_id,sign=1)
     event = get_object_or_404(Event, id=event_id)
-    return render(request, 'sign_index.html', {'event': event})
+    return render(request, 'sign_index.html', {'event': event,'no_sign_guest':no_sign_guest,'has_sign_guest':has_sign_guest})
 
 # 签到动作
 @login_required
 def sign_index_action(request,event_id):
     event = get_object_or_404(Event, id=event_id)
+    no_sign_guest = Guest.objects.filter(event_id=event_id,sign=0)
+    has_sign_guest = Guest.objects.filter(event_id=event_id,sign=1)
     phone = request.POST.get('phone','')
     result = Guest.objects.filter(phone = phone)
 
     if not result:
-        return render(request, 'sign_index.html', {'event': event,'hint': '手机号码错误.'})
+        return render(request, 'sign_index.html', {'event': event,'no_sign_guest':no_sign_guest,'has_sign_guest':has_sign_guest,'hint': '没有该手机号码对应的嘉宾.'})
+
     result = Guest.objects.filter(phone=phone,event_id=event_id)
-
     if not result:
-        return render(request, 'sign_index.html', {'event': event,'hint': '发布会或手机号码错误.'})
-    result = Guest.objects.get(phone=phone,event_id=event_id)
+        return render(request, 'sign_index.html', {'event': event,'no_sign_guest':no_sign_guest,'has_sign_guest':has_sign_guest,'hint': '签到的嘉宾不是该发布会的嘉宾.'})
 
+    result = Guest.objects.get(phone=phone,event_id=event_id)
     if result.sign:
-        return render(request, 'sign_index.html', {'event': event,'hint': "用户已签到过."})
+        return render(request, 'sign_index.html', {'event': event,'no_sign_guest':no_sign_guest,'has_sign_guest':has_sign_guest,'hint': "该嘉宾已签到过."})
     else:
         Guest.objects.filter(phone=phone,event_id=event_id).update(sign = '1')
-        return render(request, 'sign_index.html', {'event': event,'hint':'签到成功!','guest': result})
+        return render(request, 'sign_index.html', {'event': event,'no_sign_guest':no_sign_guest,'has_sign_guest':has_sign_guest,'hint':'签到成功!','guest': result})
 
 #按发布会名称搜索
 @login_required
@@ -79,7 +83,7 @@ def search_event_name(request):
 def guest_manage(request):
     username = request.session.get('user', '')
     guest_list = Guest.objects.all()
-    paginator = Paginator(guest_list, 2)
+    paginator = Paginator(guest_list, 5)
     page = request.GET.get('page')
     try:
         contacts = paginator.page(page)
